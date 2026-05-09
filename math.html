@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بازی‌های ریاضی کودکان - نسخه معلم</title>
+    <style>
+        :root {
+            --primary: #FF6B6B;
+            --secondary: #4ECDC4;
+            --success: #95E1D3;
+            --warning: #FFE66D;
+            --danger: #FF6B6B;
+            --purple: #A8E6CF;
+            --orange: #FFD93D;
+            --blue: #6BCF7F;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            padding: 30px;
+            text-align: center;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 3px solid #e9ecef;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            font-size: 1.3em;
+            font-weight: bold;
+            transition: all 0.3s;
+            border: none;
+            background: transparent;
+        }
+
+        .tab:hover {
+            background: rgba(255,255,255,0.5);
+        }
+
+        .tab.active {
+            background: white;
+            color: var(--primary);
+            border-bottom: 4px solid var(--primary);
+        }
+
+        .game-container {
+            display: none;
+            padding: 40px;
+            animation: fadeIn 0.5s;
+        }
+
+        .game-container.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* پنل معلم */
+        .teacher-panel {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            padding: 25px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .teacher-panel h3 {
+            color: #d63031;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .control-group {
+            margin-bottom: 20px;
+        }
+
+        .control-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #2d3436;
+        }
+
+        .control-group input,
+        .control-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #dfe6e9;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+
+        .control-group input:focus,
+        .control-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255,107,107,0.1);
+        }
+
+        .color-picker {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .color-option {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .color-option:hover {
+            transform: scale(1.1);
+        }
+
+        .color-option.selected {
+            border-color: #2d3436;
+            box-shadow: 0 0 0 3px rgba(0,0,0,0.1);
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+            color: #2d3436;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            color: white;
+        }
+
+        /* بازی پیتزا */
+        .pizza-game {
+            text-align: center;
+        }
+
+        .pizza-question {
+            font-size: 2em;
+            margin: 30px 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            border-radius: 15px;
+            color: #d63031;
+            font-weight: bold;
+        }
+
+        .fraction {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            vertical-align: middle;
+            margin: 0 5px;
+        }
+
+        .fraction-numerator {
+            border-bottom: 2px solid currentColor;
+            padding: 0 10px 5px;
+        }
+
+        .fraction-denominator {
+            padding: 5px 10px 0;
+        }
+
+        #pizzaWheel {
+            max-width: 400px;
+            margin: 30px auto;
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.2));
+        }
+
+        .pizza-slice {
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .pizza-slice:hover {
+            opacity: 0.8;
+            filter: brightness(1.1);
+        }
+
+        .pizza-slice.selected {
+            filter: brightness(1.3) drop-shadow(0 0 10px rgba(255,255,255,0.8));
+        }
+
+        /* بازی چرخ شانس */
+        .wheel-game {
+            text-align: center;
+        }
+
+        .wheel-container {
+            position: relative;
+            width: 400px;
+            height: 400px;
+            margin: 30px auto;
+        }
+
+        #spinWheel {
+            width: 100%;
+            height: 100%;
+            transition: transform 3s cubic-bezier(0.17, 0.67, 0.12, 0.99);
+        }
+
+        .wheel-arrow {
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-top: 40px solid #e74c3c;
+            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3));
+            z-index: 10;
+        }
+
+        .wheel-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            background: white;
+            border-radius: 50%;
+            border: 5px solid #2d3436;
+            z-index: 5;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .color-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .color-btn {
+            padding: 15px 30px;
+            border: 3px solid transparent;
+            border-radius: 15px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .color-btn.selected {
+            border-color: #2d3436;
+            transform: scale(1.1);
+            box-shadow: 0 0 0 5px rgba(0,0,0,0.1);
+        }
+
+        /* بازی مهره‌ها */
+        .marble-game {
+            text-align: center;
+        }
+
+        .marble-question {
+            font-size: 1.8em;
+            margin: 30px 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            border-radius: 15px;
+            color: #2d3436;
+            font-weight: bold;
+        }
+
+        .marble-box {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            border: 5px solid #d63031;
+            border-radius: 20px;
+            padding: 40px;
+            margin: 30px auto;
+            max-width: 600px;
+            min-height: 300px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            align-items: center;
+            box-shadow: inset 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .marble {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            position: relative;
+        }
+
+        .marble::before {
+            content: '';
+            position: absolute;
+            top: 15%;
+            left: 25%;
+            width: 30%;
+            height: 30%;
+            background: radial-gradient(circle, rgba(255,255,255,0.8), transparent);
+            border-radius: 50%;
+        }
+
+        .marble:hover {
+            transform: scale(1.15) translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+        }
+
+        .marble.picked {
+            opacity: 0.3;
+            transform: scale(0.8);
+            cursor: not-allowed;
+        }
+
+        .marble.red {
+            background: radial-gradient(circle at 30% 30%, #ff6b6b, #c92a2a);
+        }
+
+        .marble.blue {
+            background: radial-gradient(circle at 30% 30%, #4dabf7, #1864ab);
+        }
+
+        /* نتیجه و امتیاز */
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 15px;
+            font-size: 1.5em;
+            font-weight: bold;
+            text-align: center;
+            display: none;
+        }
+
+        .result.success {
+            background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+            color: #0c7c59;
+            display: block;
+            animation: bounce 0.5s;
+        }
+
+        .result.error {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            color: #c92a2a;
+            display: block;
+            animation: shake 0.5s;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .score-board {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            border-radius: 15px;
+        }
+
+        .score-item {
+            text-align: center;
+        }
+
+        .score-item .label {
+            font-size: 0.9em;
+            color: #636e72;
+            margin-bottom: 5px;
+        }
+
+        .score-item .value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #d63031;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .tab {
+                font-size: 1em;
+                padding: 15px 10px;
+            }
+
+            .game-container {
+                padding: 20px;
+            }
+
+            .wheel-container {
+                width: 300px;
+                height: 300px;
+            }
+
+            #pizzaWheel {
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎮 بازی‌های ریاضی کودکان 🎮</h1>
+            <p>یادگیری کسرها با بازی و سرگرمی</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab(0)">🍕 پیتزا</button>
+            <button class="tab" onclick="switchTab(1)">🎡 چرخ شانس</button>
+            <button class="tab" onclick="switchTab(2)">⚪ جعبه مهره‌ها</button>
+        </div>
+
+        <!-- بازی پیتزا -->
+        <div class="game-container active" id="game0">
+            <div class="teacher-panel">
+                <h3>⚙️ پنل معلم - تنظیمات پیتزا</h3>
+                <div class="control-group">
+                    <label>مخرج کسر (تعداد قطعات پیتزا):</label>
+                    <input type="number" id="pizzaDenominator" min="2" max="12" value="8" onchange="generatePizzaQuestion()">
+                </div>
+                <button class="btn btn-primary" onclick="generatePizzaQuestion()">🎲 سوال جدید</button>
+            </div>
+
+            <div class="pizza-game">
+                <div class="score-board">
+                    <div class="score-item">
+                        <div class="label">امتیاز</div>
+                        <div class="value" id="pizzaScore">0</div>
+                    </div>
+                    <div class="score-item">
+                        <div class="label">تلاش‌ها</div>
+                        <div class="value" id="pizzaAttempts">0</div>
+                    </div>
+                </div>
+
+                <div class="pizza-question" id="pizzaQuestion">
+                    روی <span class="fraction"><span class="fraction-numerator">3</span><span class="fraction-denominator">8</span></span> پیتزا کلیک کن!
+                </div>
+
+                <svg id="pizzaWheel" viewBox="0 0 200 200">
+                    <!-- قطعات پیتزا به صورت داینامیک ساخته می‌شوند -->
+                </svg>
+
+                <div class="result" id="pizzaResult"></div>
+
+                <div class="controls">
+                    <button class="btn btn-success" onclick="checkPizza()">✓ بررسی پاسخ</button>
+                    <button class="btn btn-danger" onclick="resetPizza()">↻ شروع دوباره</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- بازی چرخ شانس -->
+        <div class="game-container" id="game1">
+            <div class="teacher-panel">
+                <h3>⚙️ پنل معلم - تنظیمات چرخ شانس</h3>
+                <div class="control-group">
+                    <label>تعداد قطعات چرخ:</label>
+                    <input type="number" id="wheelSegments" min="3" max="12" value="6" onchange="generateWheel()">
+                </div>
+                <div class="control-group">
+                    <label>رنگ‌های چرخ :</label>
+                    <div class="color-picker" id="wheelColorPicker">
+                        <div class="color-option selected" style="background: #e74c3c" data-color="#e74c3c" onclick="toggleWheelColor(this)"></div>
+                        <div class="color-option selected" style="background: #3498db" data-color="#3498db" onclick="toggleWheelColor(this)"></div>
+                        <div class="color-option selected" style="background: #2ecc71" data-color="#2ecc71" onclick="toggleWheelColor(this)"></div>
+                        <div class="color-option" style="background: #f39c12" data-color="#f39c12" onclick="toggleWheelColor(this)"></div>
+                        <div class="color-option" style="background: #9b59b6" data-color="#9b59b6" onclick="toggleWheelColor(this)"></div>
+                        <div class="color-option" style="background: #1abc9c" data-color="#1abc9c" onclick="toggleWheelColor(this)"></div>
+                        <div class="color-option" style="background: #e91e63" data-color="#e91e63" onclick="toggleWheelColor(this)"></div>
+                        <div class="color-option" style="background: #ff9800" data-color="#ff9800" onclick="toggleWheelColor(this)"></div>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label>مدت زمان چرخش (ثانیه):</label>
+                    <input type="number" id="spinDuration" min="2" max="10" value="4" step="0.5">
+                </div>
+                <button class="btn btn-primary" onclick="generateWheel()">🔄 ساخت چرخ جدید</button>
+            </div>
+
+            <div class="wheel-game">
+                <div class="score-board">
+                    <div class="score-item">
+                        <div class="label">امتیاز</div>
+                        <div class="value" id="wheelScore">0</div>
+                    </div>
+                    <div class="score-item">
+                        <div class="label">چرخش‌ها</div>
+                        <div class="value" id="wheelSpins">0</div>
+                    </div>
+                </div>
+
+                <div class="pizza-question">
+                    رنگ مورد نظر را انتخاب کن و چرخ را بچرخان!
+                </div>
+
+                <div class="color-buttons" id="colorButtons">
+                    <!-- دکمه‌های رنگ به صورت داینامیک ساخته می‌شوند -->
+                </div>
+
+                <div class="wheel-container">
+                    <div class="wheel-arrow"></div>
+                    <svg id="spinWheel" viewBox="0 0 200 200">
+                        <!-- چرخ به صورت داینامیک ساخته می‌شود -->
+                    </svg>
+                    <div class="wheel-center"></div>
+                </div>
+
+                <div class="result" id="wheelResult"></div>
+
+                <div class="controls">
+                    <button class="btn btn-success" onclick="spinWheel()" id="spinButton">🎡 چرخاندن چرخ</button>
+                    <button class="btn btn-danger" onclick="resetWheel()">↻ شروع دوباره</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- بازی مهره‌ها -->
+        <div class="game-container" id="game2">
+            <div class="teacher-panel">
+                <h3>⚙️ پنل معلم - تنظیمات جعبه مهره‌ها</h3>
+                <div class="control-group">
+                    <label>سوال:</label>
+                    <input type="text" id="marbleQuestion" value="چند مهره قرمز در جعبه است؟" placeholder="سوال خود را بنویسید">
+                </div>
+                <div class="control-group">
+                    <label>تعداد مهره‌های قرمز:</label>
+                    <input type="number" id="redMarbles" min="0" max="20" value="5" onchange="generateMarbles()">
+                </div>
+                <div class="control-group">
+                    <label>تعداد مهره‌های آبی:</label>
+                    <input type="number" id="blueMarbles" min="0" max="20" value="3" onchange="generateMarbles()">
+                </div>
+                <div class="control-group">
+                    <label>پاسخ درست:</label>
+                    <select id="marbleAnswer">
+                        <option value="red">تعداد مهره‌های قرمز</option>
+                        <option value="blue">تعداد مهره‌های آبی</option>
+                        <option value="total">مجموع مهره‌ها</option>
+                        <option value="difference">تفاوت قرمز و آبی</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary" onclick="generateMarbles()">🎲 سوال جدید</button>
+            </div>
+
+            <div class="marble-game">
+                <div class="score-board">
+                    <div class="score-item">
+                        <div class="label">امتیاز</div>
+                        <div class="value" id="marbleScore">0</div>
+                    </div>
+                    <div class="score-item">
+                        <div class="label">تلاش‌ها</div>
+                        <div class="value" id="marbleAttempts">0</div>
+                    </div>
+                </div>
+
+                <div class="marble-question" id="marbleQuestionDisplay">
+                   احتمال انتخاب کدام مهره بیشتر است؟
+                </div>
+
+                <div class="marble-box" id="marbleBox">
+                    <!-- مهره‌ها به صورت داینامیک ساخته می‌شوند -->
+                </div>
+
+                <div class="control-group" style="max-width: 300px; margin: 30px auto;">
+                    <label>پاسخ شما:</label>
+                    <input type="text" id="marbleUserAnswer" placeholder="قرمز یا آبی یا برابر بنویسید" style="text-align: center; font-size: 1.5em;">
+
+
+                <div class="result" id="marbleResult"></div>
+
+                <div class="controls">
+                    <button class="btn btn-success" onclick="checkMarbles()">✓ بررسی پاسخ</button>
+                    <button class="btn btn-danger" onclick="resetMarbles()">↻ شروع دوباره</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        
+        // متغیرهای سراسری
+        let currentTab = 0;
+        
+        // بازی پیتزا
+        let pizzaState = {
+            denominator: 8,
+            numerator: 3,
+            selectedSlices: [],
+            score: 0,
+            attempts: 0
+        };
+
+        // بازی چرخ
+        let wheelState = {
+            segments: 6,
+            colors: ['#e74c3c', '#3498db', '#2ecc71'],
+            colorNames: ['قرمز', 'آبی', 'سبز'],
+            selectedColor: null,
+            isSpinning: false,
+            score: 0,
+            spins: 0,
+            duration: 4
+        };
+
+        // بازی مهره
+        let marbleState = {
+            redCount: 5,
+            blueCount: 3,
+            question: 'چند مهره قرمز در جعبه است؟',
+            answerType: 'red',
+            score: 0,
+            attempts: 0
+        };
+
+        // تابع تغییر تب
+        function switchTab(index) {
+            currentTab = index;
+            document.querySelectorAll('.tab').forEach((tab, i) => {
+                tab.classList.toggle('active', i === index);
+            });
+            document.querySelectorAll('.game-container').forEach((game, i) => {
+                game.classList.toggle('active', i === index);
+            });
+        }
+
+        // ========== بازی پیتزا ==========
+        function generatePizzaQuestion() {
+            pizzaState.denominator = parseInt(document.getElementById('pizzaDenominator').value);
+            pizzaState.numerator = Math.floor(Math.random() * (pizzaState.denominator - 1)) + 1;
+            pizzaState.selectedSlices = [];
+            
+            document.getElementById('pizzaQuestion').innerHTML = `
+                روی <span class="fraction"><span class="fraction-numerator">${pizzaState.numerator}</span><span class="fraction-denominator">${pizzaState.denominator}</span></span> پیتزا کلیک کن!
+            `;
+            
+            drawPizza();
+            hideResult('pizzaResult');
+        }
+
+        function drawPizza() {
+            const svg = document.getElementById('pizzaWheel');
+            svg.innerHTML = '';
+            
+            const centerX = 100;
+            const centerY = 100;
+            const radius = 90;
+            const angleStep = (2 * Math.PI) / pizzaState.denominator;
+            
+            const colors = ['#FFD93D', '#FFA500', '#FF6B6B', '#FF8C42', '#FFAA33', '#FFB84D', '#FFC966', '#FFD580'];
+            
+            for (let i = 0; i < pizzaState.denominator; i++) {
+                const startAngle = i * angleStep - Math.PI / 2;
+                const endAngle = (i + 1) * angleStep - Math.PI / 2;
+                
+                const x1 = centerX + radius * Math.cos(startAngle);
+                const y1 = centerY + radius * Math.sin(startAngle);
+                const x2 = centerX + radius * Math.cos(endAngle);
+                const y2 = centerY + radius * Math.sin(endAngle);
+                const largeArc = angleStep > Math.PI ? 1 : 0;
+
+                const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                path.setAttribute('d', `
+                    M ${centerX} ${centerY}
+                    L ${x1} ${y1}
+                    A ${radius} ${radius} 0 ${largeArc} 1 ${x2} ${y2}
+                    Z
+                `);
+
+                path.setAttribute('fill', colors[i % colors.length]);
+                path.setAttribute('stroke', '#fff');
+                path.setAttribute('stroke-width', '3');
+                path.setAttribute('class', 'pizza-slice');
+                path.setAttribute('data-index', i);
+
+                path.addEventListener('click', () => selectSlice(i));
+
+                svg.appendChild(path);
+            }
+
+            // مرکز پیتزا
+            const center = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            center.setAttribute('cx', centerX);
+            center.setAttribute('cy', centerY);
+            center.setAttribute('r', '15');
+            center.setAttribute('fill', '#8B4513');
+            center.setAttribute('stroke', '#654321');
+            center.setAttribute('stroke-width', '2');
+            svg.appendChild(center);
+        }
+
+        function selectSlice(index) {
+        const slice = document.querySelector(`[data-index="${index}"]`);
+
+    if (pizzaState.selectedSlices.includes(index)) {
+        pizzaState.selectedSlices =
+            pizzaState.selectedSlices.filter(i => i !== index);
+        slice.classList.remove('selected');
+    } else {
+        pizzaState.selectedSlices.push(index);
+        slice.classList.add('selected');
+    }
+}
+
+
+        function checkPizza() {
+            pizzaState.attempts++;
+            document.getElementById('pizzaAttempts').textContent =
+                pizzaState.attempts;
+
+            if (pizzaState.selectedSlices.length === pizzaState.numerator) {
+                pizzaState.score += 10;
+                document.getElementById('pizzaScore').textContent =
+                    pizzaState.score;
+
+                showResult(
+                    'pizzaResult',
+                    'عالی بود! 🎉',
+                    true
+                );
+            } else {
+                showResult(
+                    'pizzaResult',
+                    `باید ${pizzaState.numerator} قطعه انتخاب می‌کردی`,
+                    false
+                );
+            }
+        }
+
+        function resetPizza() {
+            generatePizzaQuestion();
+        }
+
+        // ========== بازی چرخ شانس ==========
+        function toggleWheelColor(element) {
+            element.classList.toggle('selected');
+
+            const selected = document.querySelectorAll('.color-option.selected');
+
+            if (selected.length < 1) {
+                element.classList.add('selected');
+                alert('حداقل 1 رنگ لازم است');
+            }
+        }
+
+        function generateWheel() {
+            wheelState.segments =
+                parseInt(document.getElementById('wheelSegments').value);
+
+            wheelState.duration =
+                parseFloat(document.getElementById('spinDuration').value);
+
+            const selectedColors =
+                document.querySelectorAll('.color-option.selected');
+
+            wheelState.colors =
+                Array.from(selectedColors).map(c => c.dataset.color);
+
+            drawWheel();
+            createColorButtons();
+        }
+
+        function drawWheel() {
+            const svg = document.getElementById('spinWheel');
+            svg.innerHTML = '';
+
+            const centerX = 100;
+            const centerY = 100;
+            const radius = 95;
+
+            const angleStep =
+                (2 * Math.PI) / wheelState.segments;
+
+            for (let i = 0; i < wheelState.segments; i++) {
+
+                const startAngle =
+                    i * angleStep - Math.PI / 2;
+
+                const endAngle =
+                    (i + 1) * angleStep - Math.PI / 2;
+
+                const x1 =
+                    centerX + radius * Math.cos(startAngle);
+
+                const y1 =
+                    centerY + radius * Math.sin(startAngle);
+
+                const x2 =
+                    centerX + radius * Math.cos(endAngle);
+
+                const y2 =
+                    centerY + radius * Math.sin(endAngle);
+
+                const path =
+                    document.createElementNS(
+                        'http://www.w3.org/2000/svg',
+                        'path'
+                    );
+
+                path.setAttribute(
+                    'd',
+                    `
+                    M ${centerX} ${centerY}
+                    L ${x1} ${y1}
+                    A ${radius} ${radius} 0 0 1 ${x2} ${y2}
+                    Z
+                    `
+                );
+
+                path.setAttribute(
+                    'fill',
+                    wheelState.colors[i % wheelState.colors.length]
+                );
+
+                path.setAttribute('stroke', '#fff');
+                path.setAttribute('stroke-width', '3');
+
+                svg.appendChild(path);
+            }
+        }
+
+        function createColorButtons() {
+            const container =
+                document.getElementById('colorButtons');
+
+            container.innerHTML = '';
+
+            wheelState.colors.forEach((color, index) => {
+
+                const btn = document.createElement('button');
+
+                btn.className = 'color-btn';
+
+                btn.style.background = color;
+
+                btn.textContent = `رنگ ${index + 1}`;
+
+                btn.onclick = () => selectColor(color, btn);
+
+                container.appendChild(btn);
+            });
+        }
+
+        function selectColor(color, btn) {
+            wheelState.selectedColor = color;
+
+            document.querySelectorAll('.color-btn')
+                .forEach(b => b.classList.remove('selected'));
+
+            btn.classList.add('selected');
+        }
+
+        function spinWheel() {
+
+            if (wheelState.isSpinning) return;
+
+            if (!wheelState.selectedColor) {
+                alert('ابتدا یک رنگ انتخاب کن');
+                return;
+            }
+
+            wheelState.isSpinning = true;
+
+            const wheel =
+                document.getElementById('spinWheel');
+
+            const segmentAngle =
+                360 / wheelState.segments;
+
+            // انتخاب تصادفی قاچ
+            const winningSegment =
+                Math.floor(Math.random() * wheelState.segments);
+
+            // زاویه نهایی دقیق
+            const finalAngle =
+                (360 * 5) +
+                (360 - (winningSegment * segmentAngle) - segmentAngle / 2);
+
+            wheel.style.transition =
+                `transform ${wheelState.duration}s cubic-bezier(0.17,0.67,0.12,0.99)`;
+
+            wheel.style.transform =
+                `rotate(${finalAngle}deg)`;
+
+            setTimeout(() => {
+
+                wheelState.spins++;
+
+                document.getElementById('wheelSpins').textContent =
+                    wheelState.spins;
+
+                const landedColor =
+                    wheelState.colors[
+                        winningSegment % wheelState.colors.length
+                    ];
+
+                if (landedColor === wheelState.selectedColor) {
+
+                    wheelState.score += 10;
+
+                    document.getElementById('wheelScore').textContent =
+                        wheelState.score;
+
+                    showResult(
+                        'wheelResult',
+                        'آفرین! درست حدس زدی 🎯',
+                        true
+                    );
+
+                } else {
+
+                    showResult(
+                        'wheelResult',
+                        'دوباره تلاش کن 😄',
+                        false
+                    );
+                }
+
+                wheelState.isSpinning = false;
+
+            }, wheelState.duration * 1000);
+        }
+
+        function resetWheel() {
+            document.getElementById('spinWheel').style.transform =
+                'rotate(0deg)';
+
+            hideResult('wheelResult');
+        }
+
+        // ========== بازی مهره‌ها ==========
+        function generateMarbles() {
+
+    marbleState.redCount =
+        parseInt(document.getElementById('redMarbles').value);
+
+    marbleState.blueCount =
+        parseInt(document.getElementById('blueMarbles').value);
+
+    marbleState.question =
+        document.getElementById('marbleQuestion').value;
+
+    document.getElementById('marbleQuestionDisplay')
+        .textContent = marbleState.question;
+
+    const box =
+        document.getElementById('marbleBox');
+
+    box.innerHTML = '';
+
+    // مهره‌های قرمز
+    for (let i = 0; i < marbleState.redCount; i++) {
+
+        const marble = document.createElement('div');
+
+        marble.className = 'marble red';
+
+        marble.onclick = () => pickMarble(marble);
+
+        box.appendChild(marble);
+    }
+
+    // مهره‌های آبی
+    for (let i = 0; i < marbleState.blueCount; i++) {
+
+        const marble = document.createElement('div');
+
+        marble.className = 'marble blue';
+
+        marble.onclick = () => pickMarble(marble);
+
+        box.appendChild(marble);
+    }
+
+    hideResult('marbleResult');
+}
+
+function pickMarble(marble) {
+
+    if (marble.classList.contains('picked')) {
+        marble.classList.remove('picked');
+    } else {
+        marble.classList.add('picked');
+    }
+}
+
+function checkMarbles() {
+
+    marbleState.attempts++;
+
+    document.getElementById('marbleAttempts').textContent =
+        marbleState.attempts;
+
+    const userAnswer =
+        document.getElementById('marbleUserAnswer').value.trim();
+
+    let correctAnswer;
+
+    if (marbleState.redCount > marbleState.blueCount)
+        correctAnswer = 'red';
+    else if (marbleState.blueCount > marbleState.redCount)
+        correctAnswer = 'blue';
+    else
+        correctAnswer = 'equal';
+
+    const labels = { red: 'قرمز', blue: 'آبی', equal: 'برابر' };
+
+    if (userAnswer === correctAnswer) {
+
+        marbleState.score += 10;
+
+        document.getElementById('marbleScore').textContent =
+            marbleState.score;
+
+        showResult(
+            'marbleResult',
+            'پاسخ درست بود 🌟',
+            true
+        );
+
+    } else {
+
+        showResult(
+            'marbleResult',
+            `پاسخ درست: ${labels[correctAnswer]}`,
+            false
+        );
+    }
+}
+
+function resetMarbles() {
+
+    document.getElementById('marbleUserAnswer').value = '';
+
+    generateMarbles();
+}
+
+
+        // ========== توابع عمومی ==========
+        function showResult(id, message, success) {
+
+            const result =
+                document.getElementById(id);
+
+            result.textContent = message;
+
+            result.className =
+                `result ${success ? 'success' : 'error'}`;
+        }
+
+        function hideResult(id) {
+
+            const result =
+                document.getElementById(id);
+
+            result.className = 'result';
+        }
+
+        // راه‌اندازی اولیه
+        generatePizzaQuestion();
+        generateWheel();
+        generateMarbles();
+
+    </script>
+</body>
+</html>
